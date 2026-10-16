@@ -12,11 +12,9 @@ import {
   COLORS,
   DIMENSIONS,
   FILM_NOTES,
-  MANIFESTO,
   NAV,
   PRODUCTS,
   SERVICES,
-  STATS,
   WORKSHOP,
 } from "./content";
 import { FRAME_PACKS, type FramePackKey } from "./framePacks";
@@ -265,24 +263,6 @@ export function FormaPage() {
         start: "top 85%",
         onEnter: () => element.classList.add("is-past-story"),
         onLeaveBack: () => element.classList.remove("is-past-story"),
-      });
-
-      gsap.fromTo(
-        ".forma-word",
-        { opacity: 0.12 },
-        { opacity: 1, stagger: 0.1, ease: "none", scrollTrigger: { trigger: ".forma-manifesto", start: "top 82%", end: "bottom 50%", scrub: true } },
-      );
-      element.querySelectorAll<HTMLElement>(".forma-stat-value").forEach((item) => {
-        const counter = { value: 0 };
-        gsap.to(counter, {
-          value: Number(item.dataset.value),
-          duration: 2.1,
-          ease: "power2.out",
-          onUpdate: () => {
-            item.textContent = Math.round(counter.value).toLocaleString("en-US").replace(",", " ");
-          },
-          scrollTrigger: { trigger: ".forma-stats", start: "top 82%" },
-        });
       });
 
       /* ---- servislər: sətirlər maskadan qalxır, yan pəncərədə kadrlar sürüşür ---- */
@@ -636,6 +616,13 @@ export function FormaPage() {
         </svg>
       </div>
 
+      {/* başlıq mix-blend ilə rənglənir — düymə ondan ayrı qatdadır ki, öz rəngini saxlasın */}
+      <Link className="forma-store-link forma-showroom-cta" href="/magaza" onClick={openStore}>
+        <span className="forma-store-link-thumb" aria-hidden="true">
+          <Image src="/forma/magaza/A1.webp" alt="" fill sizes="40px" />
+        </span>
+        Showroom-a bax <span aria-hidden="true">→</span>
+      </Link>
       <header className="forma-header">
         <a className="forma-logo" href="#story" aria-label="Forma — başlanğıc">Forma</a>
         <nav aria-label="Əsas naviqasiya">
@@ -705,27 +692,7 @@ export function FormaPage() {
           </section>
         </div>
 
-        <section id="manifest" className="forma-manifest" aria-labelledby="manifest-title">
-          <span className="forma-eyebrow">Fəlsəfə</span>
-          <h2 id="manifest-title" className="forma-manifesto" aria-label={MANIFESTO}>
-            {MANIFESTO.split(" ").map((word, position) => (
-              <span className="forma-word" aria-hidden="true" key={`${word}-${position}`}>{word}</span>
-            ))}
-          </h2>
-          <div className="forma-stats">
-            {STATS.map((stat) => (
-              <div className="forma-stat" key={stat.label}>
-                <b aria-label={`${stat.value.toLocaleString("en-US").replace(",", " ")}${stat.suffix}`}>
-                  <span className="forma-stat-value" aria-hidden="true" data-value={stat.value}>
-                    {stat.value.toLocaleString("en-US").replace(",", " ")}
-                  </span>
-                  {stat.suffix}
-                </b>
-                <span>{stat.label}</span>
-              </div>
-            ))}
-          </div>
-
+        <section id="manifest" className="forma-manifest" aria-label="Fəlsəfə">
           <div className="forma-services">
             <div className="forma-services-list">
               {SERVICES.map((service) => (
@@ -837,12 +804,6 @@ export function FormaPage() {
           <span className="forma-eyebrow">Showroom</span>
           <h2 className="forma-split" data-skew>Evinizi <em>birlikdə quraq</em></h2>
           <div className="forma-footer-actions">
-            <Link className="forma-store-link forma-magnetic" href="/magaza" onClick={openStore}>
-              <span className="forma-store-link-thumb" aria-hidden="true">
-                <Image src="/forma/magaza/A1.webp" alt="" fill sizes="64px" />
-              </span>
-              Mağazaya daxil ol <span aria-hidden="true">→</span>
-            </Link>
             <a className="forma-contact forma-magnetic" href="mailto:salam@forma.az">salam@forma.az <span aria-hidden="true">↗</span></a>
           </div>
         </div>

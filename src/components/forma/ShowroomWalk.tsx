@@ -16,15 +16,12 @@ import "./forma.css";
  * qısa dayanacaq var: orada panel açılır.
  */
 const CLIPS = ["store1", "store2", "store3", "store4", "store5"] as const;
-/** Təkərin 1 px-i neçə kadr irəli aparır (bir "klik" ≈ 100 px ≈ 0.5 san video). */
-const SPEED = 0.12;
+/** Təkərin 1 px-i neçə kadr irəli aparır (bir "klik" ≈ 100 px ≈ 0.8 san video). */
+const SPEED = 0.2;
 /** İzləmə yumşaqlığı (0…1, böyük = daha çevik). */
-const LERP = 0.075;
+const LERP = 0.1;
 /** Təkər bu qədər ms susanda yeni jest sayılır. */
-const STOP_IDLE = 140;
-/** Dayanacaqda ən az / ən çox tutma müddəti (ms). */
-const HOLD_MIN = 260;
-const HOLD_MAX = 900;
+const STOP_IDLE = 160;
 /** Kadr statistikası paneli — lazım olanda true et. */
 const DEBUG = false;
 const HALL_HOLD = 22;
@@ -97,8 +94,20 @@ export function ShowroomWalk() {
     const state = { stop: -1, menu: false, intro: true };
     let film: ReturnType<typeof createFrameSequence> | null = null;
 
+    // məhsullar arası keçid: sabit müddətli, yumşaq başlayıb yumşaq bitən hərəkət
+    let glide: { from: number; to: number; start: number; duration: number } | null = null;
+    const glideTo = (to: number) => {
+      const distance = Math.abs(to - current);
+      glide = { from: current, to, start: performance.now(), duration: Math.min(1800, 700 + distance * 7) };
+      target = to;
+    };
     const render = () => {
-      current += (target - current) * LERP;
+      if (glide) {
+        const t = Math.min(1, (performance.now() - glide.start) / glide.duration);
+        const eased = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+        current = glide.from + (glide.to - glide.from) * eased;
+        if (t >= 1) glide = null;
+      } else current += (target - current) * LERP;
       if (Math.abs(target - current) < 0.01) current = target;
       const segment =
         TIMELINE.segments.find((item) => current < item.to) ?? TIMELINE.segments[TIMELINE.segments.length - 1];
@@ -118,31 +127,29 @@ decode ${stats.decoding}  yaddaşda ${stats.decoded} (${stats.memory} MB)`;
       raf = requestAnimationFrame(render);
     };
 
-    // jest dayanacağa çatanda qısa müddət orada tutulur (ətalət ötürməsin);
-    // fasilə, yeni güclü jest və ya HOLD_MAX bitəndə hərəkət davam edir
-    let heldSince = 0;
+    // divan bölməsində bir jest = bir məhsul: kamera növbəti divana özü gedir,
+    // yol boyu gələn təkər hadisələri (ətalət) yeni addım sayılmır
     let lastInput = 0;
-    let lastSize = 0;
+    const firstStop = TIMELINE.stops[0];
     const move = (delta: number) => {
       const now = performance.now();
-      const idle = now - lastInput;
-      const size = Math.abs(delta);
-      const growing = size > lastSize * 1.4 && size > 4;
+      const fresh = now - lastInput > STOP_IDLE;
       lastInput = now;
-      lastSize = size;
-      if (heldSince) {
-        const held = now - heldSince;
-        const release = held > HOLD_MAX || (held > HOLD_MIN && (idle > STOP_IDLE || growing));
-        if (!release) return;
-        heldSince = 0;
+      // keçid gedərkən və dayanacaqda həmin jestin qalığı gəldikcə yeni addım yoxdur;
+      // küçə, qapı və zalda scroll heç vaxt bloklanmır
+      if (glide) return;
+      if (!fresh && TIMELINE.stops.some((point) => Math.abs(point - target) < 0.5)) return;
+      const inSofas = target >= firstStop - 0.5;
+      if (inSofas && (delta > 0 || target > firstStop + 0.5)) {
+        const index = TIMELINE.stops.findIndex((point) => Math.abs(point - target) < 0.5);
+        const next = TIMELINE.stops[index + Math.sign(delta)];
+        if (next === undefined && delta > 0) return;
+        glideTo(next ?? firstStop);
+        return;
       }
       const next = Math.min(TIMELINE.units, Math.max(0, target + delta));
-      const crossed = TIMELINE.stops.find((point) =>
-        delta > 0 ? target < point && next >= point : target > point && next <= point,
-      );
-      if (crossed !== undefined) {
-        target = crossed;
-        heldSince = now;
+      if (delta > 0 && target < firstStop && next >= firstStop) {
+        glideTo(firstStop);
         return;
       }
       target = next;

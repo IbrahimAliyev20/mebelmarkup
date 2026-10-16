@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forma — Mebel studiyası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0d0b;--ink:#efe7da;--mut:#9b9185;--acc:#c8693c;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:34px 56px;mix-blend-mode:difference}
+.logo{font-family:var(--serif);font-size:30px;letter-spacing:.3em;text-transform:uppercase}
+nav{display:flex;gap:44px;font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+nav a{position:relative}nav a:after{content:"";position:absolute;left:0;bottom:-5px;height:1px;width:100%;background:#fff;transform:scaleX(0);transform-origin:left;transition:.5s}nav a:hover:after{transform:scaleX(1)}
+.cur{position:fixed;z-index:99;top:0;left:0;width:14px;height:14px;margin:-7px;border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;transition:width .3s,height .3s,margin .3s}
+.cur.big{width:70px;height:70px;margin:-35px}
+.prog{position:fixed;left:0;top:0;height:2px;width:100%;background:var(--acc);transform:scaleX(0);transform-origin:left;z-index:60}
+.panel{position:relative;z-index:2;height:100vh;display:flex;align-items:center;padding:0 8vw}
+.panel.r{justify-content:flex-end;text-align:right}
+.eyebrow{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--acc);margin-bottom:26px;display:block}
+h1,h2{font-family:var(--serif);font-weight:300;line-height:.92}
+h1{font-size:min(11.5vw,210px);letter-spacing:-.02em}
+h1 em,h2 em{font-style:italic;color:var(--acc)}
+h2{font-size:min(6.5vw,112px)}
+.ch{overflow:hidden;display:inline-block}.ch span{display:inline-block;transform:translateY(110%)}
+p.lead{max-width:420px;margin-top:34px;line-height:1.8;font-size:15px;color:var(--mut);font-weight:300}
+.panel.r p.lead{margin-left:auto}
+.hero-meta{position:absolute;bottom:48px;left:8vw;right:8vw;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--mut)}
+.line{display:inline-block;width:60px;height:1px;background:var(--mut);vertical-align:middle;margin-left:14px}
+.swatches{display:flex;gap:16px;margin-top:40px}.panel.r .swatches{justify-content:flex-end}
+.sw{width:46px;height:46px;border-radius:50%;border:1px solid #fff3;cursor:none;transition:transform .4s,border-color .4s}
+.sw:hover,.sw.on{transform:scale(1.18);border-color:var(--ink)}
+.sw-name{margin-top:18px;font-family:var(--serif);font-style:italic;font-size:26px;min-height:34px}
+.rv{opacity:0;transform:translateY(40px)}
+/* sequence */
+#seq{position:relative;z-index:5;height:100vh;background:#000;overflow:hidden}
+#seq canvas{width:100%;height:100%;display:block}
+.cap{position:absolute;left:8vw;bottom:14vh;max-width:560px;opacity:0}
+.cap h3{font-family:var(--serif);font-weight:300;font-size:64px;line-height:1}
+.cap p{margin-top:16px;color:#ddd;font-weight:300;line-height:1.7}
+.fcount{position:absolute;right:56px;bottom:48px;font-size:11px;letter-spacing:.25em;color:var(--mut)}
+.nofr{position:absolute;inset:0;display:none;place-items:center;text-align:center;color:var(--mut);font-size:13px;letter-spacing:.2em;line-height:2.2;text-transform:uppercase;pointer-events:none}
+/* collection */
+#col{position:relative;z-index:5;height:100vh;background:var(--ink);color:#1a1612;overflow:hidden}
+#col h2{position:absolute;top:13vh;left:8vw;color:#1a1612}
+.track{position:absolute;top:0;left:0;height:100%;display:flex;align-items:flex-end;gap:5vw;padding:0 8vw 11vh 55vw;will-change:transform}
+.card{flex:0 0 26vw;height:56vh;position:relative}
+.card .img{position:absolute;inset:0;border-radius:3px;overflow:hidden;background-size:cover;background-position:center}
+.card .img img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.card:hover .img img{transform:scale(1.08)}
+.card .tag{position:absolute;left:0;top:-34px;font-size:11px;letter-spacing:.25em;color:#8a7d6e}
+.card .nm{position:absolute;left:0;bottom:-70px;font-family:var(--serif);font-size:34px}
+.card .pr{position:absolute;right:0;bottom:-58px;font-size:13px;letter-spacing:.1em}
+/* footer */
+footer{position:relative;z-index:5;background:var(--bg);padding:20vh 8vw 40px;overflow:hidden}
+footer h2{font-size:min(10vw,180px)}
+.mq{white-space:nowrap;font-family:var(--serif);font-size:min(8vw,140px);font-style:italic;color:#ffffff12;margin:12vh 0;display:flex;gap:4vw}
+.btn{display:inline-flex;align-items:center;gap:16px;margin-top:50px;padding:22px 40px;border:1px solid #fff4;border-radius:60px;font-size:12px;letter-spacing:.25em;text-transform:uppercase;transition:.5s}
+.btn:hover{background:var(--ink);color:#111}
+.fl{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.2em;color:var(--mut);text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="cur"></div><div class="prog"></div>
+<canvas id="gl"></canvas>
+<header><a class="logo" href="#">Forma</a><nav><a href="#story">Hekayə</a><a href="#seq">Emalatxana</a><a href="#col">Kolleksiya</a><a href="#end">Əlaqə</a></nav></header>
+
+<main id="story">
+  <section class="panel">
+    <div>
+      <span class="eyebrow">Mebel studiyası · Bakı</span>
+      <h1><span class="ch"><span>Sükutun</span></span><br><span class="ch"><span><em>forması</em></span></span></h1>
+      <p class="lead rv">Əl işi, sakit xətlər və illərlə qalan material. Evinizi doldurmayan, tamamlayan mebel.</p>
+    </div>
+    <div class="hero-meta"><span>Skrol edin <i class="line"></i></span><span>Kolleksiya 2026</span></div>
+  </section>
+  <section class="panel r">
+    <div><span class="eyebrow rv">01 — Material</span>
+    <h2 class="rv">Toxuma, <em>toxunuş</em></h2>
+    <p class="lead rv">Təbii yun və kətan qarışığı. Hər parça Avropada toxunur, əllə gərilir və 3 il sınaqdan keçir.</p></div>
+  </section>
+  <section class="panel">
+    <div><span class="eyebrow rv">02 — Konstruksiya</span>
+    <h2 class="rv">Gizli <em>möhkəmlik</em></h2>
+    <p class="lead rv">Quru sərt ağac karkas, ayaqlar masiv qoz ağacından. Mismar yox, birləşmə var.</p></div>
+  </section>
+  <section class="panel r">
+    <div><span class="eyebrow rv">03 — Rəng</span>
+    <h2 class="rv">Sizin <em>çalarınız</em></h2>
+    <div class="swatches rv" id="sws"></div><div class="sw-name rv" id="swn"></div></div>
+  </section>
+</main>
+
+<section id="seq">
+  <canvas></canvas>
+  <div class="nofr">Kadrlar tapılmadı<br>frames/f_001.webp … qovluğuna şəkilləri əlavə edin</div>
+  <div class="cap"><h3></h3><p></p></div>
+  <div class="fcount">000 / 000</div>
+</section>
+
+<section id="col">
+  <h2>Kolleksiya</h2>
+  <div class="track" id="track"></div>
+</section>
+
+<footer id="end">
+  <span class="eyebrow">Showroom</span>
+  <h2>Evinizi <em>birlikdə</em><br>quraq.</h2>
+  <a class="btn" href="mailto:salam@forma.az">salam@forma.az →</a>
+  <div class="mq"><span>Forma</span><span>Atelier</span><span>Forma</span><span>Atelier</span></div>
+  <div class="fl"><span>© 2026 Forma Studio</span><span>Nizami küç. 12, Bakı</span><span>Instagram · Behance</span></div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/* ================= KONFİQURASİYA — burada dəyişin ================= */
+const FRAMES = { count: 120, path: i => `frames/f_${String(i + 1).padStart(3, '0')}.webp` };
+const SEQ_CAPTIONS = [
+  { at: 0.05, t: 'Taxta seçilir', p: 'Hər lövhə əllə seçilir, qurudulur və ölçülür.' },
+  { at: 0.38, t: 'Karkas qurulur', p: 'Usta əlləri ilə birləşmələr — mismarsız.' },
+  { at: 0.72, t: 'Parça gərilir', p: 'Son toxunuş: parça əllə gərilir və tikilir.' }
+];
+const COLORS = [
+  { n: 'Qum', c: '#c9b79c' }, { n: 'Zeytun', c: '#6b6f45' },
+  { n: 'Terakota', c: '#b4573a' }, { n: 'Qrafit', c: '#3a3a3c' }
+];
+const PRODUCTS = [
+  { n: 'Nara divan', p: '2 450 ₼', c: ['#b9a283', '#6e5a43'] },
+  { n: 'Oda kreslo', p: '980 ₼', c: ['#8a8c5e', '#3d3f26'] },
+  { n: 'Sol masa', p: '1 320 ₼', c: ['#a7714c', '#4a2f1c'] },
+  { n: 'Kumo puf', p: '420 ₼', c: ['#b4573a', '#5a2616'] },
+  { n: 'Ayo rəf', p: '1 780 ₼', c: ['#5a5a5d', '#1c1c1e'] }
+];
+// Kolleksiya şəkilləri: img/p1.webp … əlavə etsəniz görünəcək, yoxsa rəngli fon qalır
+const PRODUCT_IMG = i => `img/p${i + 1}.webp`;
+/* ================================================================ */
+
+gsap.registerPlugin(ScrollTrigger);
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+
+/* --- Lenis + ScrollTrigger --- */
+const lenis = new Lenis({ lerp: 0.085 });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
+$$('nav a').forEach(a => a.addEventListener('click', e => { e.preventDefault(); lenis.scrollTo(a.getAttribute('href'), { duration: 2 }); }));
+gsap.to('.prog', { scaleX: 1, ease: 'none', scrollTrigger: { scrub: 0, start: 0, end: 'max' } });
+
+/* --- Kursor --- */
+const cur = $('.cur'); const cx = gsap.quickTo(cur, 'x', { duration: .35 }), cy = gsap.quickTo(cur, 'y', { duration: .35 });
+const mouse = { x: 0, y: 0 };
+addEventListener('mousemove', e => { cx(e.clientX); cy(e.clientY); mouse.x = e.clientX / innerWidth - .5; mouse.y = e.clientY / innerHeight - .5; });
+document.addEventListener('mouseover', e => cur.classList.toggle('big', !!e.target.closest('a,.sw,.card')));
+
+/* ================= THREE.JS ================= */
+const canvas = $('#gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.55;
+const camera = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, 0.1, 100);
+
+const key = new THREE.SpotLight(0xffe2c0, 90, 0, .5, .8); key.position.set(4, 6, 4); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -.0004;
+scene.add(key, new THREE.DirectionalLight(0x8aa4ff, .5).translateX(-5).translateY(2));
+
+// parça teksturası (prosedural)
+function fabricTex() {
+  const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d');
+  x.fillStyle = '#808080'; x.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 256; i += 2) { x.fillStyle = `rgba(${i % 4 ? 255 : 0},${i % 4 ? 255 : 0},${i % 4 ? 255 : 0},.12)`; x.fillRect(i, 0, 1, 256); x.fillRect(0, i, 256, 1); }
+  for (let i = 0; i < 9000; i++) { x.fillStyle = `rgba(${Math.random() > .5 ? 255 : 0},${Math.random() > .5 ? 255 : 0},0,.06)`; x.fillRect(Math.random() * 256, Math.random() * 256, 2, 1); }
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(3, 3); return t;
+}
+const fabric = new THREE.MeshStandardMaterial({ color: COLORS[0].c, roughness: .95, bumpMap: fabricTex(), bumpScale: 1.4 });
+const wood = new THREE.MeshStandardMaterial({ color: '#4a2f1c', roughness: .45 });
+
+const sofa = new THREE.Group();
+const rb = (w, h, d, r, m, x, y, z) => { const o = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 6, r), m); o.position.set(x, y, z); o.castShadow = o.receiveShadow = true; sofa.add(o); return o; };
+rb(3.3, .38, 1.4, .1, fabric, 0, .5, 0);                 // baza
+rb(1.45, .34, 1.12, .14, fabric, -.74, .85, .12);        // oturacaq
+rb(1.45, .34, 1.12, .14, fabric, .74, .85, .12);
+rb(1.55, .85, .38, .16, fabric, -.76, 1.2, -.55).rotation.x = -.12; // arxalıq
+rb(1.55, .85, .38, .16, fabric, .76, 1.2, -.55).rotation.x = -.12;
+rb(.34, .78, 1.4, .13, fabric, -1.78, .92, 0);           // qollar
+rb(.34, .78, 1.4, .13, fabric, 1.78, .92, 0);
+[[-1.5, -.5], [1.5, -.5], [-1.5, .5], [1.5, .5]].forEach(([x, z]) => {
+  const l = new THREE.Mesh(new THREE.CylinderGeometry(.06, .04, .32, 24), wood); l.position.set(x, .16, z); l.castShadow = true; sofa.add(l);
+});
+scene.add(sofa);
+
+const floor = new THREE.Mesh(new THREE.CircleGeometry(14, 64), new THREE.ShadowMaterial({ opacity: .55 }));
+floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+
+// toz hissəcikləri
+const N = 500, pg = new THREE.BufferGeometry(), pp = new Float32Array(N * 3);
+for (let i = 0; i < N * 3; i++) pp[i] = (Math.random() - .5) * 16;
+pg.setAttribute('position', new THREE.BufferAttribute(pp, 3));
+const dust = new THREE.Points(pg, new THREE.PointsMaterial({ size: .025, color: 0xffd9b0, transparent: true, opacity: .5, depthWrite: false }));
+scene.add(dust);
+
+/* kamera "rig" — GSAP bunu skrola bağlayır */
+const rig = { a: .5, h: 1.6, r: 8.2, sx: 1.7, sy: 0, ry: 0, look: 1 };
+function updateCam() {
+  const a = rig.a + mouse.x * .25;
+  camera.position.set(Math.sin(a) * rig.r, rig.h - mouse.y * .5, Math.cos(a) * rig.r);
+  camera.lookAt(0, rig.look, 0);
+  sofa.position.x = rig.sx; sofa.rotation.y = rig.ry;
+  camera.setViewOffset?.(innerWidth, innerHeight, 0, 0, innerWidth, innerHeight);
+}
+const tl = gsap.timeline({ scrollTrigger: { trigger: '#story', start: 'top top', end: 'bottom bottom', scrub: 1.2 } });
+tl.to(rig, { a: 1.4, h: 1.2, r: 6.2, sx: -1.6, ry: .5, duration: 1 })
+  .to(rig, { a: -.2, h: .9, r: 4.4, sx: 0, ry: 0, look: .9, duration: 1 })
+  .to(rig, { a: 2.9, h: 2.2, r: 7.4, sx: 1.8, ry: -.4, look: 1, duration: 1 });
+
+let glActive = true;
+ScrollTrigger.create({ trigger: '#seq', start: 'top bottom', onEnter: () => glActive = false, onLeaveBack: () => glActive = true });
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  if (!glActive) return;
+  const t = clock.getElapsedTime();
+  dust.rotation.y = t * .02; dust.position.y = Math.sin(t * .3) * .2;
+  sofa.position.y = Math.sin(t * .8) * .015;
+  updateCam(); renderer.render(scene, camera);
+});
+addEventListener('resize', () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); ScrollTrigger.refresh(); });
+
+/* --- rəng seçici --- */
+const sws = $('#sws'), swn = $('#swn');
+COLORS.forEach((c, i) => {
+  const b = document.createElement('div'); b.className = 'sw' + (i ? '' : ' on'); b.style.background = c.c;
+  b.onclick = () => {
+    $$('.sw').forEach(s => s.classList.remove('on')); b.classList.add('on');
+    const col = new THREE.Color(c.c); gsap.to(fabric.color, { r: col.r, g: col.g, b: col.b, duration: .9, ease: 'power2.out' });
+    swn.textContent = c.n;
+  };
+  sws.appendChild(b);
+});
+swn.textContent = COLORS[0].n;
+
+/* ================= GSAP: mətn animasiyaları ================= */
+gsap.to('.ch span', { y: 0, duration: 1.4, ease: 'expo.out', stagger: .15, delay: .3 });
+gsap.to('.hero-meta,.panel:first-child .rv', { opacity: 1, y: 0, duration: 1.2, delay: 1.1 });
+$$('.panel:not(:first-child) .rv').forEach(el => gsap.to(el, { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none reverse' } }));
+
+/* ================= FRAME SEQUENCE ================= */
+(() => {
+  const sec = $('#seq'), cv = sec.querySelector('canvas'), ctx = cv.getContext('2d');
+  const cap = sec.querySelector('.cap'), fc = sec.querySelector('.fcount'), nofr = sec.querySelector('.nofr');
+  const imgs = new Array(FRAMES.count).fill(null); let ok = false, cur = 0;
+  const size = () => { cv.width = innerWidth; cv.height = innerHeight; draw(); };
+  function draw() {
+    let im = null;
+    for (let d = 0; d < FRAMES.count && !im; d++) im = imgs[cur - d] || imgs[cur + d];
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cv.width, cv.height);
+    if (!im) return;
+    const s = Math.max(cv.width / im.naturalWidth, cv.height / im.naturalHeight);
+    const w = im.naturalWidth * s, h = im.naturalHeight * s;
+    ctx.drawImage(im, (cv.width - w) / 2, (cv.height - h) / 2, w, h);
+  }
+  // yükləmə: əvvəl hər 6-cı kadr, sonra qalanı
+  const order = [...Array(FRAMES.count).keys()].sort((a, b) => (a % 6 ? 1 : 0) - (b % 6 ? 1 : 0) || a - b);
+  let first = true;
+  order.forEach(i => { const im = new Image(); im.onload = () => { imgs[i] = im; ok = true; if (first) { first = false; draw(); } }; im.src = FRAMES.path(i); });
+  setTimeout(() => { if (!ok) nofr.style.display = 'grid'; }, 2500);
+  size(); addEventListener('resize', size);
+
+  const st = ScrollTrigger.create({
+    trigger: sec, start: 'top top', end: '+=350%', pin: true, scrub: true,
+    onUpdate: s => {
+      cur = Math.round(s.progress * (FRAMES.count - 1)); draw();
+      fc.textContent = `${String(cur + 1).padStart(3, '0')} / ${FRAMES.count}`;
+      let c = null; SEQ_CAPTIONS.forEach(x => { if (s.progress >= x.at && s.progress < x.at + .26) c = x; });
+      if (c && cap.dataset.k !== c.t) { cap.dataset.k = c.t; cap.querySelector('h3').textContent = c.t; cap.querySelector('p').textContent = c.p; gsap.fromTo(cap, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .8 }); }
+      if (!c && cap.dataset.k) { cap.dataset.k = ''; gsap.to(cap, { opacity: 0, duration: .5 }); }
+    }
+  });
+})();
+
+/* ================= KOLLEKSİYA: horizontal skrol ================= */
+(() => {
+  const track = $('#track');
+  PRODUCTS.forEach((p, i) => {
+    const d = document.createElement('div'); d.className = 'card';
+    d.innerHTML = `<span class="tag">0${i + 1}</span><div class="img" style="background:linear-gradient(${150 + i * 20}deg,${p.c[0]},${p.c[1]})"><img src="${PRODUCT_IMG(i)}" alt="" onerror="this.remove()"></div><span class="nm">${p.n}</span><span class="pr">${p.p}</span>`;
+    track.appendChild(d);
+  });
+  const dist = () => track.scrollWidth - innerWidth;
+  gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '#col', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true } });
+  gsap.from('.card .img', { clipPath: 'inset(0 0 100% 0)', duration: 1.4, ease: 'expo.out', stagger: .12, scrollTrigger: { trigger: '#col', start: 'top 60%' } });
+})();
+
+/* --- footer --- */
+gsap.to('.mq', { xPercent: -30, ease: 'none', scrollTrigger: { trigger: '.mq', scrub: 1, start: 'top bottom', end: 'bottom top' } });
+gsap.from('footer h2', { y: 80, opacity: 0, duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: 'footer', start: 'top 60%' } });
+</script>
+</body>
+</html>

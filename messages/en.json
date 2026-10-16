@@ -1,0 +1,13 @@
+{
+    "home": {
+        "title": "HR-vacancies",
+        "description": "HR-vacancies"
+    },
+    "navigation": {
+        "jobs": "Jobs",
+        "companies": "Companies",
+        "categories": "Categories",
+        "cvs": "CVs",
+        "about": "About"
+    }
+}
